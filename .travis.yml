@@ -1,10 +1,17 @@
 sudo: required
 
+language: python
+
+python: 3.6
+
 services:
   - docker
 
 before_install:
   - docker build -t $DOCKER_USERNAME/showcasepython .
+
+script:
+  - python manage.py test
 
 after_success:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
