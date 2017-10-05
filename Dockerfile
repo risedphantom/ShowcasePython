@@ -1,6 +1,33 @@
 FROM python:latest
+
+MAINTAINER Anton Panov
+
+# Install uWSGI
+RUN pip install uwsgi
+
+# Set up Nginx
+RUN apt-key adv --keyserver hkp://pgp.mit.edu:80 --recv-keys 573BFD6B3D8FBC641079A6ABABF5BD827BD9BF62 \
+	&& echo "deb http://nginx.org/packages/mainline/debian/ jessie nginx" >> /etc/apt/sources.list \
+	&& apt-get update \
+	&& apt-get install -y nginx \
+	&& rm -rf /var/lib/apt/lists/*
+
+# Redirect output
+RUN ln -sf /dev/stdout /var/log/nginx/access.log \
+	&& ln -sf /dev/stderr /var/log/nginx/error.log
+EXPOSE 80 443
+
+# Make NGINX run on the foreground
+RUN echo "daemon off;" >> /etc/nginx/nginx.conf
+RUN rm /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/conf.d/
+COPY uwsgi.ini /etc/uwsgi/
+
+# Install application
 ENV PYTHONUNBUFFERED 1
 RUN mkdir /code
 WORKDIR /code
-COPY . /code/
+ADD requirements.txt /code/
 RUN pip install -r requirements.txt
+
+COPY . /code/
