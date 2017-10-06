@@ -10,7 +10,7 @@ urlpatterns = [
     url(r'^about/?$', views.about, name='about'),
     url(r'^resume/?$', views.resume, name='resume'),
     url(r'^contacts/?$', views.contacts, name='contacts'),
-    url(r'^portfolio/?$', views.contacts, name='portfolio'),
+    url(r'^portfolio/?$', views.portfolio, name='portfolio'),
 
     # Methods
     url(r'^greeting/?$', ajax.greeting, name='greeting'),
