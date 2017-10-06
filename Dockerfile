@@ -9,7 +9,7 @@ RUN pip install uwsgi
 RUN apt-key adv --keyserver hkp://pgp.mit.edu:80 --recv-keys 573BFD6B3D8FBC641079A6ABABF5BD827BD9BF62 \
 	&& echo "deb http://nginx.org/packages/mainline/debian/ jessie nginx" >> /etc/apt/sources.list \
 	&& apt-get update \
-	&& apt-get install -y nginx \
+	&& apt-get install -y nginx supervisor \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Redirect output
