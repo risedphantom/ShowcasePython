@@ -60,7 +60,7 @@ def about(request):
         'os_freemem': int(psutil.virtual_memory().free / 1048576),
         'os_totalmem': int(psutil.virtual_memory().total / 1048576),
         'os_cpu_percent': psutil.cpu_percent(),
-        'os_cpu_freq': psutil.cpu_freq().max / 1000,
+        'os_cpu_freq': psutil.cpu_freq(True)[0].max / 1000,
     }
     return HttpResponse(template.render(context, request))
 
