@@ -21,8 +21,8 @@ EXPOSE 80 443
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf
 RUN rm /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/conf.d/
-COPY /cert/anpanov.crt /etc/nginx/
-COPY /cert/anpanov.key /etc/nginx/
+RUN mkdir /etc/nginx/ssl
+COPY /ssl /etc/nginx/ssl/
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY uwsgi.ini /etc/uwsgi/
 
