@@ -6,7 +6,7 @@ import psutil
 # Index page
 def index(request):
     context = {
-        'title': 'Панов Антон, Менеджер продукта',
+        'title': 'Панов Антон, Full-stack разработчик',
     }
     return render(request, 'website/index.html', context)
 
