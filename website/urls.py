@@ -15,3 +15,4 @@ urlpatterns = [
     # Methods
     url(r'^greeting/?$', ajax.greeting, name='greeting'),
 ]
+
