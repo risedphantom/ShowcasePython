@@ -7,11 +7,9 @@ RUN pip install uwsgi
 
 # Set up Nginx and Supervisor
 RUN apt-key adv --keyserver hkp://pgp.mit.edu:80 --recv-keys 573BFD6B3D8FBC641079A6ABABF5BD827BD9BF62 \
-	&& echo "deb http://deb.debian.org/debian jessie-backports main" >> /etc/apt/sources.list \
 	&& echo "deb http://nginx.org/packages/mainline/debian/ jessie nginx" >> /etc/apt/sources.list \
 	&& apt-get update \
-	&& apt-get -y install cron \
-	&& apt-get install -y nginx supervisor certbot \
+	&& apt-get install -y nginx supervisor \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Redirect output
@@ -22,11 +20,13 @@ EXPOSE 80 443
 # Make NGINX run on the foreground and copy configs
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf \
 	&& rm /etc/nginx/conf.d/default.conf \
-	&& mkdir /etc/letsencrypt \
-	&& mkdir /etc/nginx/ssl
+	&& mkdir /etc/nginx/ssl \
+	&& mkdir /etc/nginx/ssl/live \
+	&& mkdir /etc/nginx/ssl/archive \
+	&& mkdir /etc/nginx/ssl/live/anpanov.ru \
+	&& mkdir /etc/nginx/ssl/archive/anpanov.ru
 
 COPY nginx.conf /etc/nginx/conf.d/
-COPY /ssl /etc/nginx/ssl/
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY uwsgi.ini /etc/uwsgi/
 
@@ -35,9 +35,8 @@ ENV PYTHONUNBUFFERED 1
 RUN mkdir /code
 WORKDIR /code
 ADD requirements.txt /code/
-ADD crontab /etc/cron.d/certbot
 RUN pip install -r requirements.txt
 
 COPY . /code/
 
-CMD cron && /usr/bin/supervisord
+CMD /usr/bin/supervisord
